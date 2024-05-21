@@ -1,15 +1,21 @@
 package com.brunosola.dsclient.dto;
 
 import com.brunosola.dsclient.entities.Client;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class ClientDTO {
 
     private Long id;
+    @Size(min = 3, message = "Nome precisa ter no mínimo 3 caracteres")
+    @NotBlank(message = "Campo obrigatório")
     private String name;
     private String cpf;
     private Double income;
+    @PastOrPresent(message = "Data invalida.")
     private LocalDate birthDate;
     private Integer children;
 
