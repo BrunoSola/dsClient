@@ -4,6 +4,7 @@ import com.brunosola.dsclient.dto.ClientDTO;
 import com.brunosola.dsclient.entities.Client;
 import com.brunosola.dsclient.repositories.ClientRepository;
 import com.brunosola.dsclient.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +44,17 @@ public class ClientService {
         entity.setIncome(dto.getIncome());
         entity.setBirthDate(dto.getBirthDate());
         entity.setChildren(dto.getChildren());
+    }
+
+    @Transactional
+    public ClientDTO update(Long id, ClientDTO dto) {
+        try {
+            Client entity = repository.getReferenceById(id);
+            copyDtoToEntity(dto, entity);
+            entity = repository.save(entity);
+            return new ClientDTO(entity);
+        }catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
     }
 }
